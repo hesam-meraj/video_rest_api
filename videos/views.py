@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 from .models import Category, Video, File
@@ -9,6 +11,7 @@ from .serializers import CategorySerializer, VideoSerializer, FileSerializer
 
 class VideoListView(APIView):
 
+
     def get(self, request):
         videos = Video.objects.all()
         # dont forget to set many=True
@@ -16,6 +19,8 @@ class VideoListView(APIView):
         return Response(serializer.data)
     
 class VideoDetailView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         try:
@@ -36,7 +41,7 @@ class CategoryListView(APIView):
         return Response(serilaizer.data)
     
 class CategoryDetailView(APIView):
-
+   
     def get(self, request, pk):
         try:
             category = Category.objects.get(pk=pk)
@@ -48,6 +53,8 @@ class CategoryDetailView(APIView):
         return Response(serializer.data)
     
 class FileListView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, video_id):
         files = File.objects.filter(video_id=video_id)
@@ -55,6 +62,8 @@ class FileListView(APIView):
         return Response(serilaizer.data)
     
 class FileDetailView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, video_id):
         try:
